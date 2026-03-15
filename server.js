@@ -14,26 +14,37 @@ app.use(express.static(path.join(__dirname, 'public')));
 // ---------- Gemini setup ----------
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// ---------- Library Persistence ----------
+// ---------- Library Persistence (per-user) ----------
 const DATA_DIR = path.join(__dirname, 'data');
-const LIBRARY_PATH = path.join(DATA_DIR, 'library.json');
 
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
-function loadLibrary() {
+// Validate userId: must be a UUID v4 format
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function getUserId(req) {
+  const id = req.headers['x-user-id'];
+  if (id && UUID_RE.test(id)) return id;
+  return null;
+}
+
+function libraryPath(userId) {
+  return path.join(DATA_DIR, `library-${userId}.json`);
+}
+
+function loadLibrary(userId) {
   try {
-    if (fs.existsSync(LIBRARY_PATH)) {
-      return JSON.parse(fs.readFileSync(LIBRARY_PATH, 'utf-8'));
+    const p = libraryPath(userId);
+    if (fs.existsSync(p)) {
+      return JSON.parse(fs.readFileSync(p, 'utf-8'));
     }
   } catch { /* corrupted — start fresh */ }
   return [];
 }
 
-function saveLibrary(entries) {
-  fs.writeFileSync(LIBRARY_PATH, JSON.stringify(entries, null, 2));
+function saveLibrary(userId, entries) {
+  fs.writeFileSync(libraryPath(userId), JSON.stringify(entries, null, 2));
 }
-
-let library = loadLibrary();
 
 // ---------- Build the system prompt for pattern generation ----------
 function buildPatternPrompt(formData) {
@@ -426,11 +437,16 @@ app.post('/api/generate-image', async (req, res) => {
 
 // List all saved patterns
 app.get('/api/library', (req, res) => {
-  res.json({ entries: library });
+  const userId = getUserId(req);
+  if (!userId) return res.status(400).json({ error: 'Missing or invalid user ID' });
+  res.json({ entries: loadLibrary(userId) });
 });
 
 // Save a pattern to library
 app.post('/api/library', (req, res) => {
+  const userId = getUserId(req);
+  if (!userId) return res.status(400).json({ error: 'Missing or invalid user ID' });
+
   const { name, craftType, projectType, skillLevel, pattern, image, formData } = req.body;
 
   const entry = {
@@ -448,13 +464,18 @@ app.post('/api/library', (req, res) => {
     modifiedAt: new Date().toISOString(),
   };
 
+  const library = loadLibrary(userId);
   library.push(entry);
-  saveLibrary(library);
+  saveLibrary(userId, library);
   res.json({ entry });
 });
 
 // Update a library entry (name, rating, notes, pattern)
 app.patch('/api/library/:id', (req, res) => {
+  const userId = getUserId(req);
+  if (!userId) return res.status(400).json({ error: 'Missing or invalid user ID' });
+
+  const library = loadLibrary(userId);
   const entry = library.find(e => e.id === req.params.id);
   if (!entry) return res.status(404).json({ error: 'Entry not found' });
 
@@ -469,16 +490,20 @@ app.patch('/api/library/:id', (req, res) => {
     entry.modifiedAt = new Date().toISOString();
   }
 
-  saveLibrary(library);
+  saveLibrary(userId, library);
   res.json({ entry });
 });
 
 // Delete a library entry
 app.delete('/api/library/:id', (req, res) => {
+  const userId = getUserId(req);
+  if (!userId) return res.status(400).json({ error: 'Missing or invalid user ID' });
+
+  const library = loadLibrary(userId);
   const idx = library.findIndex(e => e.id === req.params.id);
   if (idx === -1) return res.status(404).json({ error: 'Entry not found' });
   library.splice(idx, 1);
-  saveLibrary(library);
+  saveLibrary(userId, library);
   res.json({ success: true });
 });
 

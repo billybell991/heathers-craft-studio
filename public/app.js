@@ -868,12 +868,26 @@ function renderThemePopup() {
   });
 }
 
+// ---- User ID (per-browser unique library) ----
+function getUserId() {
+  let id = localStorage.getItem('craft-studio-user-id');
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem('craft-studio-user-id', id);
+  }
+  return id;
+}
+
+function userHeaders() {
+  return { 'x-user-id': getUserId() };
+}
+
 // ---- Library System ----
 let libraryEntries = [];
 
 async function fetchLibrary() {
   try {
-    const res = await fetch('/api/library');
+    const res = await fetch('/api/library', { headers: userHeaders() });
     const data = await res.json();
     libraryEntries = data.entries || [];
     updateLibraryCount();
@@ -907,7 +921,7 @@ async function saveToLibrary() {
   try {
     const res = await fetch('/api/library', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...userHeaders() },
       body: JSON.stringify(body),
     });
     const data = await res.json();
@@ -996,7 +1010,7 @@ function renderLibraryList() {
       const newRating = entry.rating === rating ? 0 : rating;
       await fetch(`/api/library/${id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...userHeaders() },
         body: JSON.stringify({ rating: newRating }),
       });
       entry.rating = newRating;
@@ -1012,7 +1026,7 @@ function renderLibraryList() {
       if (newName && newName.trim()) {
         fetch(`/api/library/${id}`, {
           method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', ...userHeaders() },
           body: JSON.stringify({ name: newName.trim() }),
         }).then(() => {
           entry.name = newName.trim();
@@ -1051,7 +1065,7 @@ function renderLibraryList() {
     btn.addEventListener('click', async () => {
       if (!confirm(t('confirmDelete'))) return;
       const id = btn.dataset.id;
-      await fetch(`/api/library/${id}`, { method: 'DELETE' });
+      await fetch(`/api/library/${id}`, { method: 'DELETE', headers: userHeaders() });
       libraryEntries = libraryEntries.filter(e => e.id !== id);
       updateLibraryCount();
       renderLibraryList();
@@ -1094,7 +1108,7 @@ function showLibraryPattern(entry, editable) {
       const newPattern = document.getElementById('patternEditor').value;
       await fetch(`/api/library/${entry.id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...userHeaders() },
         body: JSON.stringify({ pattern: newPattern }),
       });
       entry.pattern = newPattern;
