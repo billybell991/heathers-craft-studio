@@ -376,20 +376,11 @@ async function handleSubmit(e) {
   const imageProgress = startProgressTracker('imageProgressTracker', 8000);
 
   // Fire both requests in parallel
-  const patternPromise = fetch('/api/generate-pattern', {
+  const patternDone = fetch('/api/generate-pattern', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(formData)
-  });
-
-  const imagePromise = fetch('/api/generate-image', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(formData)
-  });
-
-  // Handle pattern result
-  patternPromise
+  })
     .then(res => res.json())
     .then(data => {
       if (patternProgress) patternProgress.complete();
@@ -416,8 +407,11 @@ async function handleSubmit(e) {
       btnLoading.style.display = 'none';
     });
 
-  // Handle image result
-  imagePromise
+  const imageDone = fetch('/api/generate-image', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(formData)
+  })
     .then(res => res.json())
     .then(data => {
       if (imageProgress) imageProgress.complete();
@@ -436,6 +430,13 @@ async function handleSubmit(e) {
       document.getElementById('previewLoading').style.display = 'none';
       document.getElementById('previewContainer').style.display = 'none';
     });
+
+  // Auto-save to library once both pattern and image are done
+  Promise.allSettled([patternDone, imageDone]).then(() => {
+    if (window._lastPatternText) {
+      saveToLibrary();
+    }
+  });
 }
 
 // ---- Theme System ----
