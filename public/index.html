@@ -23,32 +23,42 @@
       <div class="logo">
         <span class="logo-icon">🧶</span>
         <div>
-          <h1>Heather's Craft Studio</h1>
-          <p class="tagline">AI-Powered Pattern Magic</p>
+          <h1 data-i18n="siteTitle">Heather's Craft Studio</h1>
+          <p class="tagline" data-i18n="tagline">AI-Powered Pattern Magic</p>
         </div>
       </div>
-      <button class="header-library-btn" id="showLibraryBtn" title="My Pattern Library">
-        📚 <span class="library-count" id="libraryCount">0</span>
-      </button>
+      <div class="header-right">
+        <div class="lang-toggle" title="English / Français">
+          <span class="lang-label lang-en">EN</span>
+          <label class="lang-switch">
+            <input type="checkbox" id="langToggle">
+            <span class="lang-slider"></span>
+          </label>
+          <span class="lang-label lang-fr">FR</span>
+        </div>
+        <button class="header-library-btn" id="showLibraryBtn" data-i18n-title="libraryBtnTitle" title="My Pattern Library">
+          📚 <span class="library-count" id="libraryCount">0</span>
+        </button>
+      </div>
     </div>
   </header>
 
   <main>
     <!-- =================== INPUT FORM =================== -->
     <section class="card form-card" id="formSection">
-      <h2><span class="section-icon">✨</span> Describe Your Dream Project</h2>
+      <h2><span class="section-icon">✨</span> <span data-i18n="formHeading">Describe Your Dream Project</span></h2>
 
       <form id="patternForm">
 
         <!-- Craft Type -->
         <div class="form-group">
-          <label for="craftType">What are we making today?</label>
+          <label for="craftType" data-i18n="craftLabel">What are we making today?</label>
           <div class="craft-toggle">
             <button type="button" class="craft-btn active" data-craft="crochet">
-              <span class="craft-btn-icon">🧶</span> Crochet
+              <span class="craft-btn-icon">🧶</span> <span data-i18n="craftCrochet">Crochet</span>
             </button>
             <button type="button" class="craft-btn" data-craft="knitting">
-              <span class="craft-btn-icon">🧶</span> Knitting
+              <span class="craft-btn-icon">🧶</span> <span data-i18n="craftKnitting">Knitting</span>
             </button>
           </div>
           <input type="hidden" id="craftType" value="crochet">
@@ -56,14 +66,14 @@
 
         <!-- Project Description -->
         <div class="form-group">
-          <label for="projectDescription">What would you like to make?</label>
-          <textarea id="projectDescription" rows="3" placeholder="e.g., A cozy baby blanket with a star pattern, a cute amigurumi fox, a lacy summer top..." required></textarea>
+          <label for="projectDescription" data-i18n="descriptionLabel">What would you like to make?</label>
+          <textarea id="projectDescription" rows="3" data-i18n-placeholder="descriptionPlaceholderCrochet" placeholder="e.g., A cozy baby blanket with a star pattern, a cute amigurumi fox, a lacy summer top..." required></textarea>
         </div>
 
         <!-- Project Type + Skill Level row -->
         <div class="form-row">
           <div class="form-group">
-            <label for="projectType">Project Type</label>
+            <label for="projectType" data-i18n="projectTypeLabel">Project Type</label>
             <select id="projectType" required>
               <option value="">Choose one...</option>
               <option value="blanket">Blanket / Afghan</option>
@@ -86,12 +96,12 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="skillLevel">Skill Level</label>
+            <label for="skillLevel" data-i18n="skillLevelLabel">Skill Level</label>
             <select id="skillLevel" required>
-              <option value="beginner">Beginner 🌱</option>
-              <option value="intermediate" selected>Intermediate 🌿</option>
-              <option value="advanced">Advanced 🌳</option>
-              <option value="expert">Expert 🏆</option>
+              <option value="beginner" data-i18n="beginner">Beginner 🌱</option>
+              <option value="intermediate" selected data-i18n="intermediate">Intermediate 🌿</option>
+              <option value="advanced" data-i18n="advanced">Advanced 🌳</option>
+              <option value="expert" data-i18n="expert">Expert 🏆</option>
             </select>
           </div>
         </div>
@@ -104,39 +114,39 @@
         <!-- Yarn Inventory -->
         <div class="form-group yarn-section">
           <label>
-            <span class="section-icon">🧶</span> Your Yarn Stash
+            <span class="section-icon">🧶</span> <span data-i18n="yarnStashLabel">Your Yarn Stash</span>
           </label>
           <div id="yarnList">
             <!-- Yarn entries will be added here -->
           </div>
-          <button type="button" class="btn-add-yarn" id="addYarnBtn" title="Add another yarn">+ Add Yarn</button>
+          <button type="button" class="btn-add-yarn" id="addYarnBtn" title="Add another yarn" data-i18n="addYarnBtn">+ Add Yarn</button>
         </div>
 
         <!-- Dimensions (optional) -->
         <div class="form-group">
-          <label>Desired Finished Size <span class="optional">(optional)</span></label>
+          <label><span data-i18n="desiredSizeLabel">Desired Finished Size</span> <span class="optional" data-i18n="optional">(optional)</span></label>
           <div class="dimensions-row">
-            <input type="text" id="desiredWidth" placeholder="Width" class="dim-input">
+            <input type="text" id="desiredWidth" data-i18n-placeholder="widthPlaceholder" placeholder="Width" class="dim-input">
             <span class="dim-x">×</span>
-            <input type="text" id="desiredHeight" placeholder="Height" class="dim-input">
+            <input type="text" id="desiredHeight" data-i18n-placeholder="heightPlaceholder" placeholder="Height" class="dim-input">
             <select id="dimensionUnit" class="dim-unit">
-              <option value="inches">inches</option>
-              <option value="cm">cm</option>
+              <option value="inches" data-i18n="inches">inches</option>
+              <option value="cm" data-i18n="cm">cm</option>
             </select>
           </div>
         </div>
 
         <!-- Special Requests -->
         <div class="form-group">
-          <label for="specialRequests">Special Requests <span class="optional">(optional)</span></label>
-          <textarea id="specialRequests" rows="2" placeholder="e.g., I'd love a scalloped edge, make it machine-washable, use a shell stitch..."></textarea>
+          <label for="specialRequests"><span data-i18n="specialRequestsLabel">Special Requests</span> <span class="optional" data-i18n="optional">(optional)</span></label>
+          <textarea id="specialRequests" rows="2" data-i18n-placeholder="specialRequestsPlaceholder" placeholder="e.g., I'd love a scalloped edge, make it machine-washable, use a shell stitch..."></textarea>
         </div>
 
         <!-- Submit -->
         <button type="submit" class="btn-generate" id="generateBtn">
-          <span class="btn-text">🪄 Generate My Pattern!</span>
+          <span class="btn-text" data-i18n="generateBtn">🪄 Generate My Pattern!</span>
           <span class="btn-loading" style="display:none;">
-            <span class="spinner"></span> Creating your pattern...
+            <span class="spinner"></span> <span data-i18n="generatingBtn">Creating your pattern...</span>
           </span>
         </button>
       </form>
@@ -144,7 +154,7 @@
 
     <!-- =================== RESULTS =================== -->
     <section class="card results-card" id="resultsSection" style="display:none;">
-      <h2><span class="section-icon">🎉</span> Your Custom Pattern</h2>
+      <h2><span class="section-icon">🎉</span> <span data-i18n="resultsHeading">Your Custom Pattern</span></h2>
 
       <!-- Preview Image -->
       <div class="preview-container" id="previewContainer">
@@ -152,21 +162,21 @@
           <div class="progress-tracker" id="imageProgressTracker">
             <div class="progress-step active" data-step="0">
               <span class="step-icon">🎨</span>
-              <span class="step-text">Picking your colors and imagining the design...</span>
+              <span class="step-text" data-i18n="imgStep0">Picking your colors and imagining the design...</span>
             </div>
             <div class="progress-step" data-step="1">
               <span class="step-icon">🖌️</span>
-              <span class="step-text">Painting the yarn textures and stitches...</span>
+              <span class="step-text" data-i18n="imgStep1">Painting the yarn textures and stitches...</span>
             </div>
             <div class="progress-step" data-step="2">
               <span class="step-icon">📸</span>
-              <span class="step-text">Styling the photo — almost done!</span>
+              <span class="step-text" data-i18n="imgStep2">Styling the photo — almost done!</span>
             </div>
           </div>
         </div>
         <div class="preview-image-wrap" id="previewImageWrap" style="display:none;">
           <img id="previewImage" alt="Preview of your finished crochet project">
-          <p class="preview-caption">✨ AI-generated preview of your finished project</p>
+          <p class="preview-caption" data-i18n="previewCaption">✨ AI-generated preview of your finished project</p>
         </div>
       </div>
 
@@ -176,23 +186,23 @@
           <div class="progress-tracker" id="patternProgressTracker">
             <div class="progress-step active" data-step="0">
               <span class="step-icon">🧶</span>
-              <span class="step-text">Reading your yarn stash and project details...</span>
+              <span class="step-text" data-i18n="patStep0">Reading your yarn stash and project details...</span>
             </div>
             <div class="progress-step" data-step="1">
               <span class="step-icon">🪝</span>
-              <span class="step-text">Choosing the best stitches for your project...</span>
+              <span class="step-text" data-i18n="patStep1">Choosing the best stitches for your project...</span>
             </div>
             <div class="progress-step" data-step="2">
               <span class="step-icon">🔢</span>
-              <span class="step-text">Calculating stitch counts and measurements...</span>
+              <span class="step-text" data-i18n="patStep2">Calculating stitch counts and measurements...</span>
             </div>
             <div class="progress-step" data-step="3">
               <span class="step-icon">📝</span>
-              <span class="step-text">Writing row-by-row instructions...</span>
+              <span class="step-text" data-i18n="patStep3">Writing row-by-row instructions...</span>
             </div>
             <div class="progress-step" data-step="4">
               <span class="step-icon">🎀</span>
-              <span class="step-text">Adding finishing touches and helpful tips...</span>
+              <span class="step-text" data-i18n="patStep4">Adding finishing touches and helpful tips...</span>
             </div>
           </div>
         </div>
@@ -203,38 +213,38 @@
 
       <!-- Action buttons -->
       <div class="result-actions" id="resultActions" style="display:none;">
-        <button class="btn-action" id="printBtn" title="Print pattern">🖨️ Print Pattern</button>
-        <button class="btn-action" id="copyBtn" title="Copy pattern text">📋 Copy to Clipboard</button>
-        <button class="btn-action btn-save" id="saveBtn" title="Save to library">💾 Save to Library</button>
-        <button class="btn-action btn-new" id="newPatternBtn">🧶 New Pattern</button>
+        <button class="btn-action" id="printBtn" title="Print pattern" data-i18n="printBtn">🖨️ Print Pattern</button>
+        <button class="btn-action" id="copyBtn" title="Copy pattern text" data-i18n="copyBtn">📋 Copy to Clipboard</button>
+        <button class="btn-action btn-save" id="saveBtn" title="Save to library" data-i18n="saveBtn">💾 Save to Library</button>
+        <button class="btn-action btn-new" id="newPatternBtn" data-i18n="newPatternBtn">🧶 New Pattern</button>
       </div>
     </section>
 
     <!-- =================== LIBRARY =================== -->
     <section class="card library-card" id="librarySection" style="display:none;">
       <div class="library-header">
-        <h2><span class="section-icon">📚</span> My Pattern Library</h2>
-        <button class="btn-action" id="backFromLibraryBtn">← Back</button>
+        <h2><span class="section-icon">📚</span> <span data-i18n="libraryHeading">My Pattern Library</span></h2>
+        <button class="btn-action" id="backFromLibraryBtn" data-i18n="backBtn">← Back</button>
       </div>
       <div id="libraryList" class="library-list">
         <!-- Library entries rendered here -->
       </div>
       <div class="library-empty" id="libraryEmpty" style="display:none;">
         <span class="library-empty-icon">🗃️</span>
-        <p>No patterns saved yet!</p>
-        <p class="library-empty-sub">Generate a pattern and click "💾 Save to Library" to start building your collection.</p>
+        <p data-i18n="libraryEmptyTitle">No patterns saved yet!</p>
+        <p class="library-empty-sub" data-i18n="libraryEmptySub">Generate a pattern and click "💾 Save to Library" to start building your collection.</p>
       </div>
     </section>
   </main>
 
   <!-- Theme Selector (bottom-left) -->
-  <button class="theme-btn" id="themeBtn" title="Change theme">🎨</button>
+  <button class="theme-btn" id="themeBtn" data-i18n-title="themeTitle" title="Change theme">🎨</button>
   <div class="theme-popup" id="themePopup" style="display:none;">
     <!-- Populated by JS -->
   </div>
 
   <footer>
-    <p>Made with 💕 and yarn — Heather's Craft Studio</p>
+    <p data-i18n="footer">Made with 💕 and yarn — Heather's Craft Studio</p>
   </footer>
 
   <script src="app.js"></script>

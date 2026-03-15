@@ -48,11 +48,15 @@ function buildPatternPrompt(formData) {
     desiredWidth,
     desiredHeight,
     dimensionUnit,
-    specialRequests
+    specialRequests,
+    language = 'en'
   } = formData;
 
+  const isFrench = language === 'fr';
   const isCrochet = craftType === 'crochet';
-  const craftName = isCrochet ? 'crochet' : 'knitting';
+  const craftName = isCrochet
+    ? (isFrench ? 'crochet' : 'crochet')
+    : (isFrench ? 'tricot' : 'knitting');
 
   const yarnList = yarns.map((y, i) => {
     let desc = `  Yarn ${i + 1}: Color="${y.color}"`;
@@ -69,12 +73,94 @@ function buildPatternPrompt(formData) {
   }
 
   const toolDesc = isCrochet
-    ? `- Crochet Hook Size: ${toolSize}`
-    : `- Knitting Needle Size: ${toolSize}\n- Needle Type: ${needleType || 'Straight Needles'}`;
+    ? `- ${isFrench ? 'Grosseur du crochet' : 'Crochet Hook Size'}: ${toolSize}`
+    : `- ${isFrench ? 'Grosseur des aiguilles' : 'Knitting Needle Size'}: ${toolSize}\n- ${isFrench ? 'Type d\'aiguilles' : 'Needle Type'}: ${needleType || (isFrench ? 'Aiguilles droites' : 'Straight Needles')}`;
 
   const toolMaterial = isCrochet
-    ? `- ${toolSize} crochet hook`
-    : `- ${toolSize} ${needleType || 'straight'} knitting needles`;
+    ? `- ${isFrench ? 'Crochet' : 'crochet hook'} ${toolSize}`
+    : `- ${isFrench ? 'Aiguilles à tricoter' : 'knitting needles'} ${toolSize} ${needleType || (isFrench ? 'droites' : 'straight')}`;
+
+  if (isFrench) {
+    const abbreviations = isCrochet
+      ? `- ml = maille en l'air (chaînette)
+- ms = maille serrée
+- b = bride
+- [etc — inclure chaque abréviation utilisée]`
+      : `- end = maille endroit
+- env = maille envers
+- mont = monter les mailles
+- rab = rabattre
+- [etc — inclure chaque abréviation utilisée]`;
+
+    return `Tu es un(e) designer professionnel(le) de patrons de ${craftName} avec des décennies d'expérience dans la rédaction de patrons de qualité publication. Un(e) artisan(e) a demandé un patron personnalisé. Génère un patron de ${craftName} COMPLET et DÉTAILLÉ basé sur ses spécifications.
+
+IMPORTANT: Le patron doit être entièrement en FRANÇAIS CANADIEN. Les mesures restent en unités anglaises/métriques telles que fournies (inches, cm, yards).
+
+DEMANDE DE PROJET :
+- Description : "${projectDescription}"
+- Type de projet : ${projectType}
+- Niveau : ${skillLevel}
+${toolDesc}${dimensions}
+
+INVENTAIRE DE LAINE :
+${yarnList}
+
+${specialRequests ? `DEMANDES SPÉCIALES : ${specialRequests}` : ''}
+
+RÈGLES IMPORTANTES :
+1. Le patron doit utiliser UNIQUEMENT les couleurs et quantités de laine fournies. Si le projet nécessite plus de laine que disponible, note-le clairement et ajuste le patron.
+2. Adapte la complexité au niveau indiqué.
+3. Sois extrêmement précis(e) — chaque rang/tour doit avoir des instructions maille par maille et un décompte de mailles.
+
+Génère le patron dans ce format EXACT :
+
+# [Nom créatif du patron]
+## Par L'Atelier de Heather
+
+### Aperçu
+[Brève description de l'article fini, incluant les dimensions approximatives]
+
+### Niveau
+${skillLevel}
+
+### Matériel nécessaire
+- [Liste chaque laine avec couleur, grosseur et métrage estimé]
+${toolMaterial}
+- [Autres outils : aiguille à laine, marqueurs de mailles, etc.]
+
+### Abréviations
+[Liste TOUTES les abréviations utilisées dans le patron avec leur nom complet]
+${abbreviations}
+
+### Échantillon
+[Spécifier les dimensions de l'échantillon]
+
+### Notes avant de commencer
+[Conseils importants, techniques à connaître ou instructions de préparation]
+
+### Instructions du patron
+
+[Instructions DÉTAILLÉES étape par étape. Pour chaque rang/tour :]
+**Rang/Tour N :** [Instructions exactes maille par maille] — [nombre de mailles à la fin du rang]
+
+[Inclure les changements de couleur en ligne où nécessaire]
+[Inclure les augmentations, diminutions et mises en forme]
+${isCrochet ? '[Pour les amigurumis/articles 3D, inclure les instructions d\'assemblage]' : '[Pour les vêtements, inclure les pièces séparées et les instructions de couture]'}
+
+### Guide des changements de couleur
+[Si plusieurs couleurs sont utilisées, fournir un résumé clair des moments de changement de couleur]
+
+### Finition
+[Rentrer les fils, instructions de blocage, assemblage final]
+
+### Conseils et variantes
+[Modifications optionnelles, ajustements de taille ou variantes créatives]
+
+---
+Rédige le patron de façon chaleureuse, encourageante et amusante — comme les conseils d'une amie dans une boutique de laine. Utilise un ton amical tout au long du patron.`;
+  }
+
+  // English prompt
 
   const abbreviations = isCrochet
     ? `- ch = chain
@@ -87,9 +173,7 @@ function buildPatternPrompt(formData) {
 - BO = bind off
 - [etc — include every abbreviation used]`;
 
-  const instructionFormat = isCrochet
-    ? `**Row/Round N:** [Exact stitch instructions] — [stitch count at end of row]`
-    : `**Row/Round N:** [Exact stitch instructions] — [stitch count at end of row]`;
+  const instructionFormat = `**Row/Round N:** [Exact stitch instructions] — [stitch count at end of row]`;
 
   return `You are an expert ${craftName} pattern designer with decades of experience writing professional, publication-quality ${craftName} patterns. A crafter has requested a custom pattern. Generate a COMPLETE, DETAILED ${craftName} pattern based on their specifications.
 

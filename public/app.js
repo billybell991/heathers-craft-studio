@@ -2,6 +2,346 @@
 //  HEATHER'S CRAFT STUDIO — Frontend Logic
 // =============================================
 
+// ---- Language / i18n ----
+let currentLang = localStorage.getItem('craft-studio-lang') || 'en';
+
+const TRANSLATIONS = {
+  en: {
+    // Header
+    siteTitle: "Heather's Craft Studio",
+    tagline: 'AI-Powered Pattern Magic',
+    libraryBtnTitle: 'My Pattern Library',
+
+    // Form section
+    formHeading: 'Describe Your Dream Project',
+    craftLabel: 'What are we making today?',
+    craftCrochet: 'Crochet',
+    craftKnitting: 'Knitting',
+    descriptionLabel: 'What would you like to make?',
+    descriptionPlaceholderCrochet: 'e.g., A cozy baby blanket with a star pattern, a cute amigurumi fox, a lacy summer top...',
+    descriptionPlaceholderKnitting: 'e.g., A chunky cable-knit scarf, a Fair Isle sweater, cozy ribbed socks...',
+    projectTypeLabel: 'Project Type',
+    skillLevelLabel: 'Skill Level',
+    hookSizeLabel: 'Crochet Hook Size',
+    needleSizeLabel: 'Needle Size',
+    needleTypeLabel: 'Needle Type',
+    notSureRecommend: 'Not sure \u2014 recommend one!',
+    yarnStashLabel: 'Your Yarn Stash',
+    addYarnBtn: '+ Add Yarn',
+    desiredSizeLabel: 'Desired Finished Size',
+    optional: '(optional)',
+    widthPlaceholder: 'Width',
+    heightPlaceholder: 'Height',
+    specialRequestsLabel: 'Special Requests',
+    specialRequestsPlaceholder: "e.g., I'd love a scalloped edge, make it machine-washable, use a shell stitch...",
+    generateBtn: '🪄 Generate My Pattern!',
+    generatingBtn: 'Creating your pattern...',
+
+    // Yarn entry
+    yarnLabel: 'Yarn',
+    colorPlaceholder: 'Color...',
+    colorOther: 'Other (type below)',
+    customColorPlaceholder: 'Custom color',
+    brandPlaceholder: 'Brand (optional)',
+    skeinsPlaceholder: '# of skeins',
+    yardagePlaceholder: 'Yards per skein (optional)',
+    removeYarnTitle: 'Remove this yarn',
+
+    // Dimension units
+    inches: 'inches',
+    cm: 'cm',
+
+    // Skill levels
+    beginner: 'Beginner 🌱',
+    intermediate: 'Intermediate 🌿',
+    advanced: 'Advanced 🌳',
+    expert: 'Expert 🏆',
+
+    // Project types — crochet
+    chooseOne: 'Choose one...',
+    blanket: 'Blanket / Afghan',
+    scarf: 'Scarf / Cowl',
+    hat: 'Hat / Beanie',
+    sweater: 'Sweater / Cardigan',
+    shawl: 'Shawl / Wrap',
+    amigurumi: 'Amigurumi (Stuffed Toy)',
+    bag: 'Bag / Tote',
+    socks: 'Socks / Slippers',
+    mittens: 'Mittens / Gloves',
+    top: 'Top / Shirt',
+    dress: 'Dress / Skirt',
+    homeDecor: 'Home Decor (Pillow, Coaster, etc.)',
+    babyItem: 'Baby Item (Booties, Bib, etc.)',
+    grannySquare: 'Granny Square Project',
+    doily: 'Doily / Table Runner',
+    accessory: 'Accessory (Headband, Earrings, etc.)',
+    other: 'Other',
+
+    // Project types — knitting extras
+    blanketKnit: 'Blanket / Afghan / Throw',
+    sweaterKnit: 'Sweater / Pullover / Cardigan',
+    shawlKnit: 'Shawl / Wrap / Stole',
+    mittensKnit: 'Mittens / Gloves / Fingerless Gloves',
+    vest: 'Vest',
+    topKnit: 'Top / Tank',
+    babyItemKnit: 'Baby Item (Booties, Blanket, etc.)',
+    homeDecorKnit: 'Home Decor (Pillow, Dishcloth, etc.)',
+    accessoryKnit: 'Accessory (Headband, Ear Warmer, etc.)',
+    toy: 'Knitted Toy / Stuffy',
+    cableProject: 'Cable Knit Project',
+    laceProject: 'Lace Knitting Project',
+
+    // Needle types
+    straightNeedles: 'Straight Needles',
+    circularNeedles: 'Circular Needles',
+    dpns: 'Double-Pointed Needles (DPNs)',
+    interchangeable: 'Interchangeable Circular Needles',
+    notSureNeedle: 'Not sure — recommend for me!',
+
+    // Yarn weights
+    lace: 'Lace (0)',
+    superFine: 'Super Fine / Fingering (1)',
+    fine: 'Fine / Sport (2)',
+    light: 'Light / DK (3)',
+    medium: 'Medium / Worsted (4)',
+    bulky: 'Bulky (5)',
+    superBulky: 'Super Bulky (6)',
+    jumbo: 'Jumbo (7)',
+
+    // Results
+    resultsHeading: 'Your Custom Pattern',
+    previewCaption: '✨ AI-generated preview of your finished project',
+
+    // Image progress steps
+    imgStep0: 'Picking your colors and imagining the design...',
+    imgStep1: 'Painting the yarn textures and stitches...',
+    imgStep2: 'Styling the photo — almost done!',
+
+    // Pattern progress steps
+    patStep0: 'Reading your yarn stash and project details...',
+    patStep1: 'Choosing the best stitches for your project...',
+    patStep2: 'Calculating stitch counts and measurements...',
+    patStep3: 'Writing row-by-row instructions...',
+    patStep4: 'Adding finishing touches and helpful tips...',
+
+    // Action buttons
+    printBtn: '🖨️ Print Pattern',
+    copyBtn: '📋 Copy to Clipboard',
+    saveBtn: '💾 Save to Library',
+    newPatternBtn: '🧶 New Pattern',
+    savedBtn: '✅ Saved!',
+    copiedBtn: '✅ Copied!',
+
+    // Library
+    libraryHeading: 'My Pattern Library',
+    backBtn: '← Back',
+    libraryEmptyTitle: 'No patterns saved yet!',
+    libraryEmptySub: 'Generate a pattern and click "💾 Save to Library" to start building your collection.',
+    viewBtn: '📖 View',
+    editBtn: '✏️ Edit',
+    printLibBtn: '🖨️ Print',
+    deleteBtn: '🗑️',
+    confirmDelete: 'Delete this pattern?',
+    renamePrompt: 'Rename pattern:',
+    backToLibrary: '📚 Back to Library',
+    saveChanges: '💾 Save Changes',
+    cancelEdit: '✗ Cancel',
+
+    // Library labels
+    crochetLabel: 'Crochet',
+    knittingLabel: 'Knitting',
+
+    // Footer
+    footer: 'Made with 💕 and yarn — Heather\'s Craft Studio',
+
+    // Errors
+    noYarnError: 'Please add at least one yarn with a color!',
+    noPatternError: 'No pattern to save yet!',
+    failPattern: 'Failed to generate pattern: ',
+    failSave: 'Failed to save: ',
+
+    // Theme
+    themeTitle: 'Change theme',
+  },
+
+  fr: {
+    // Header
+    siteTitle: "L'Atelier de Heather",
+    tagline: 'Patrons magiques propulsés par l\'IA',
+    libraryBtnTitle: 'Ma bibliothèque de patrons',
+
+    // Form section
+    formHeading: 'Décrivez votre projet de rêve',
+    craftLabel: 'Qu\'est-ce qu\'on fait aujourd\'hui?',
+    craftCrochet: 'Crochet',
+    craftKnitting: 'Tricot',
+    descriptionLabel: 'Qu\'aimeriez-vous créer?',
+    descriptionPlaceholderCrochet: 'ex. : Une couverture de bébé douillette avec un motif d\'étoile, un petit renard amigurumi, un haut d\'été en dentelle...',
+    descriptionPlaceholderKnitting: 'ex. : Un foulard en tricot torsadé, un chandail Fair Isle, des bas côtelés douillets...',
+    projectTypeLabel: 'Type de projet',
+    skillLevelLabel: 'Niveau de compétence',
+    hookSizeLabel: 'Grosseur du crochet',
+    needleSizeLabel: 'Grosseur des aiguilles',
+    needleTypeLabel: 'Type d\'aiguilles',
+    notSureRecommend: 'Pas certain(e) \u2014 recommandez-moi!',
+    yarnStashLabel: 'Votre réserve de laine',
+    addYarnBtn: '+ Ajouter une laine',
+    desiredSizeLabel: 'Dimensions finales souhaitées',
+    optional: '(optionnel)',
+    widthPlaceholder: 'Largeur',
+    heightPlaceholder: 'Hauteur',
+    specialRequestsLabel: 'Demandes spéciales',
+    specialRequestsPlaceholder: 'ex. : J\'aimerais un bord en coquilles, lavable à la machine, utiliser un point coquille...',
+    generateBtn: '🪄 Générer mon patron!',
+    generatingBtn: 'Création de votre patron en cours...',
+
+    // Yarn entry
+    yarnLabel: 'Laine',
+    colorPlaceholder: 'Couleur...',
+    colorOther: 'Autre (tapez ci-dessous)',
+    customColorPlaceholder: 'Couleur personnalisée',
+    brandPlaceholder: 'Marque (optionnel)',
+    skeinsPlaceholder: '# de pelotes',
+    yardagePlaceholder: 'Verges par pelote (optionnel)',
+    removeYarnTitle: 'Retirer cette laine',
+
+    // Dimension units (Canadian — same as English)
+    inches: 'inches',
+    cm: 'cm',
+
+    // Skill levels
+    beginner: 'Débutant(e) 🌱',
+    intermediate: 'Intermédiaire 🌿',
+    advanced: 'Avancé(e) 🌳',
+    expert: 'Expert(e) 🏆',
+
+    // Project types — crochet
+    chooseOne: 'Choisissez...',
+    blanket: 'Couverture / Afghan',
+    scarf: 'Foulard / Col',
+    hat: 'Tuque / Bonnet',
+    sweater: 'Chandail / Cardigan',
+    shawl: 'Châle / Étole',
+    amigurumi: 'Amigurumi (Toutou en crochet)',
+    bag: 'Sac / Fourre-tout',
+    socks: 'Bas / Pantoufles',
+    mittens: 'Mitaines / Gants',
+    top: 'Haut / Camisole',
+    dress: 'Robe / Jupe',
+    homeDecor: 'Décor maison (Coussin, Sous-verre, etc.)',
+    babyItem: 'Article pour bébé (Chaussons, Bavette, etc.)',
+    grannySquare: 'Projet carré granny',
+    doily: 'Napperon / Chemin de table',
+    accessory: 'Accessoire (Bandeau, Boucles d\'oreilles, etc.)',
+    other: 'Autre',
+
+    // Project types — knitting extras
+    blanketKnit: 'Couverture / Afghan / Jeté',
+    sweaterKnit: 'Chandail / Pull / Cardigan',
+    shawlKnit: 'Châle / Étole / Enveloppe',
+    mittensKnit: 'Mitaines / Gants / Mitaines sans doigts',
+    vest: 'Veste',
+    topKnit: 'Haut / Camisole',
+    babyItemKnit: 'Article bébé (Chaussons, Couverture, etc.)',
+    homeDecorKnit: 'Décor maison (Coussin, Lavette, etc.)',
+    accessoryKnit: 'Accessoire (Bandeau, Cache-oreilles, etc.)',
+    toy: 'Jouet tricoté / Toutou',
+    cableProject: 'Projet en tricot torsadé',
+    laceProject: 'Projet en tricot dentelle',
+
+    // Needle types
+    straightNeedles: 'Aiguilles droites',
+    circularNeedles: 'Aiguilles circulaires',
+    dpns: 'Aiguilles à double pointe (DPN)',
+    interchangeable: 'Aiguilles circulaires interchangeables',
+    notSureNeedle: 'Pas certain(e) — recommandez-moi!',
+
+    // Yarn weights
+    lace: 'Dentelle (0)',
+    superFine: 'Très fin / Fingering (1)',
+    fine: 'Fin / Sport (2)',
+    light: 'Léger / DK (3)',
+    medium: 'Moyen / Worsted (4)',
+    bulky: 'Gros (5)',
+    superBulky: 'Très gros (6)',
+    jumbo: 'Jumbo (7)',
+
+    // Results
+    resultsHeading: 'Votre patron personnalisé',
+    previewCaption: '✨ Aperçu généré par l\'IA de votre projet fini',
+
+    // Image progress steps
+    imgStep0: 'Choix de vos couleurs et conception du design...',
+    imgStep1: 'Création des textures de laine et des points...',
+    imgStep2: 'Mise en scène de la photo — presque fini!',
+
+    // Pattern progress steps
+    patStep0: 'Lecture de votre réserve de laine et des détails du projet...',
+    patStep1: 'Choix des meilleurs points pour votre projet...',
+    patStep2: 'Calcul du nombre de mailles et des mesures...',
+    patStep3: 'Rédaction des instructions rang par rang...',
+    patStep4: 'Ajout des touches finales et des conseils utiles...',
+
+    // Action buttons
+    printBtn: '🖨️ Imprimer le patron',
+    copyBtn: '📋 Copier dans le presse-papier',
+    saveBtn: '💾 Sauvegarder',
+    newPatternBtn: '🧶 Nouveau patron',
+    savedBtn: '✅ Sauvegardé!',
+    copiedBtn: '✅ Copié!',
+
+    // Library
+    libraryHeading: 'Ma bibliothèque de patrons',
+    backBtn: '← Retour',
+    libraryEmptyTitle: 'Aucun patron sauvegardé!',
+    libraryEmptySub: 'Générez un patron et cliquez sur « 💾 Sauvegarder » pour commencer votre collection.',
+    viewBtn: '📖 Voir',
+    editBtn: '✏️ Modifier',
+    printLibBtn: '🖨️ Imprimer',
+    deleteBtn: '🗑️',
+    confirmDelete: 'Supprimer ce patron?',
+    renamePrompt: 'Renommer le patron :',
+    backToLibrary: '📚 Retour à la bibliothèque',
+    saveChanges: '💾 Sauvegarder les modifications',
+    cancelEdit: '✗ Annuler',
+
+    // Library labels
+    crochetLabel: 'Crochet',
+    knittingLabel: 'Tricot',
+
+    // Footer
+    footer: 'Fait avec 💕 et de la laine — L\'Atelier de Heather',
+
+    // Errors
+    noYarnError: 'Ajoutez au moins une laine avec une couleur!',
+    noPatternError: 'Aucun patron à sauvegarder!',
+    failPattern: 'Échec de la génération du patron : ',
+    failSave: 'Échec de la sauvegarde : ',
+
+    // Theme
+    themeTitle: 'Changer le thème',
+
+    // Colors
+    White: 'Blanc', Cream: 'Crème', Ivory: 'Ivoire', Black: 'Noir',
+    Gray: 'Gris', Charcoal: 'Anthracite',
+    'Baby Pink': 'Rose bébé', 'Dusty Rose': 'Rose poudré', 'Hot Pink': 'Rose vif',
+    Red: 'Rouge', Burgundy: 'Bourgogne', Coral: 'Corail',
+    Peach: 'Pêche', Orange: 'Orange', Rust: 'Rouille',
+    Mustard: 'Moutarde', Yellow: 'Jaune', Gold: 'Or',
+    'Sage Green': 'Vert sauge', Mint: 'Menthe', 'Forest Green': 'Vert forêt',
+    Olive: 'Olive', Teal: 'Sarcelle',
+    'Baby Blue': 'Bleu bébé', 'Sky Blue': 'Bleu ciel', Navy: 'Marine',
+    'Royal Blue': 'Bleu royal',
+    Lavender: 'Lavande', Purple: 'Violet', Plum: 'Prune', Mauve: 'Mauve',
+    Tan: 'Beige', Taupe: 'Taupe', Brown: 'Brun', Chocolate: 'Chocolat',
+    'Variegated / Multi': 'Panaché / Multicolore',
+  }
+};
+
+function t(key) {
+  return TRANSLATIONS[currentLang]?.[key] ?? TRANSLATIONS.en[key] ?? key;
+}
+
 // ---- Craft type config ----
 let currentCraft = 'crochet';
 
@@ -20,52 +360,60 @@ const KNITTING_NEEDLE_SIZES = [
   '12.75mm (US 17)', '15.0mm (US 19)', '19.0mm (US 35)', '25.0mm (US 50)'
 ];
 
-const KNITTING_NEEDLE_TYPES = [
-  'Straight Needles', 'Circular Needles', 'Double-Pointed Needles (DPNs)',
-  'Interchangeable Circular Needles', 'Not sure — recommend for me!'
+const KNITTING_NEEDLE_TYPES_KEYS = [
+  'straightNeedles', 'circularNeedles', 'dpns',
+  'interchangeable', 'notSureNeedle'
 ];
 
+const KNITTING_NEEDLE_TYPES_VALUES = {
+  straightNeedles: 'Straight Needles',
+  circularNeedles: 'Circular Needles',
+  dpns: 'Double-Pointed Needles (DPNs)',
+  interchangeable: 'Interchangeable Circular Needles',
+  notSureNeedle: 'Not sure — recommend for me!',
+};
+
 const CROCHET_PROJECT_TYPES = [
-  { value: '', label: 'Choose one...' },
-  { value: 'blanket', label: 'Blanket / Afghan' },
-  { value: 'scarf', label: 'Scarf / Cowl' },
-  { value: 'hat', label: 'Hat / Beanie' },
-  { value: 'sweater', label: 'Sweater / Cardigan' },
-  { value: 'shawl', label: 'Shawl / Wrap' },
-  { value: 'amigurumi', label: 'Amigurumi (Stuffed Toy)' },
-  { value: 'bag', label: 'Bag / Tote' },
-  { value: 'socks', label: 'Socks / Slippers' },
-  { value: 'mittens', label: 'Mittens / Gloves' },
-  { value: 'top', label: 'Top / Shirt' },
-  { value: 'dress', label: 'Dress / Skirt' },
-  { value: 'home decor', label: 'Home Decor (Pillow, Coaster, etc.)' },
-  { value: 'baby item', label: 'Baby Item (Booties, Bib, etc.)' },
-  { value: 'granny square', label: 'Granny Square Project' },
-  { value: 'doily', label: 'Doily / Table Runner' },
-  { value: 'accessory', label: 'Accessory (Headband, Earrings, etc.)' },
-  { value: 'other', label: 'Other' },
+  { value: '', labelKey: 'chooseOne' },
+  { value: 'blanket', labelKey: 'blanket' },
+  { value: 'scarf', labelKey: 'scarf' },
+  { value: 'hat', labelKey: 'hat' },
+  { value: 'sweater', labelKey: 'sweater' },
+  { value: 'shawl', labelKey: 'shawl' },
+  { value: 'amigurumi', labelKey: 'amigurumi' },
+  { value: 'bag', labelKey: 'bag' },
+  { value: 'socks', labelKey: 'socks' },
+  { value: 'mittens', labelKey: 'mittens' },
+  { value: 'top', labelKey: 'top' },
+  { value: 'dress', labelKey: 'dress' },
+  { value: 'home decor', labelKey: 'homeDecor' },
+  { value: 'baby item', labelKey: 'babyItem' },
+  { value: 'granny square', labelKey: 'grannySquare' },
+  { value: 'doily', labelKey: 'doily' },
+  { value: 'accessory', labelKey: 'accessory' },
+  { value: 'other', labelKey: 'other' },
 ];
 
 const KNITTING_PROJECT_TYPES = [
-  { value: '', label: 'Choose one...' },
-  { value: 'blanket', label: 'Blanket / Afghan / Throw' },
-  { value: 'scarf', label: 'Scarf / Cowl' },
-  { value: 'hat', label: 'Hat / Beanie' },
-  { value: 'sweater', label: 'Sweater / Pullover / Cardigan' },
-  { value: 'shawl', label: 'Shawl / Wrap / Stole' },
-  { value: 'socks', label: 'Socks' },
-  { value: 'mittens', label: 'Mittens / Gloves / Fingerless Gloves' },
-  { value: 'vest', label: 'Vest' },
-  { value: 'top', label: 'Top / Tank' },
-  { value: 'dress', label: 'Dress / Skirt' },
-  { value: 'baby item', label: 'Baby Item (Booties, Blanket, etc.)' },
-  { value: 'home decor', label: 'Home Decor (Pillow, Dishcloth, etc.)' },
-  { value: 'bag', label: 'Bag / Tote' },
-  { value: 'accessory', label: 'Accessory (Headband, Ear Warmer, etc.)' },
-  { value: 'toy', label: 'Knitted Toy / Stuffy' },
-  { value: 'cable project', label: 'Cable Knit Project' },
-  { value: 'lace project', label: 'Lace Knitting Project' },
-  { value: 'other', label: 'Other' },
+  { value: '', labelKey: 'chooseOne' },
+  { value: 'blanket', labelKey: 'blanketKnit' },
+  { value: 'scarf', labelKey: 'scarf' },
+  { value: 'hat', labelKey: 'hat' },
+  { value: 'sweater', labelKey: 'sweaterKnit' },
+  { value: 'shawl', labelKey: 'shawlKnit' },
+  { value: 'socks', labelKey: 'socks' },
+  { value: 'mittens', labelKey: 'mittensKnit' },
+  { value: 'vest', labelKey: 'vest' },
+  { value: 'top', labelKey: 'topKnit' },
+  { value: 'dress', labelKey: 'dress' },
+  { value: 'baby item', labelKey: 'babyItemKnit' },
+  { value: 'home decor', labelKey: 'homeDecorKnit' },
+  { value: 'bag', labelKey: 'bag' },
+  { value: 'accessory', labelKey: 'accessoryKnit' },
+  { value: 'toy', labelKey: 'toy' },
+  { value: 'cable project', labelKey: 'cableProject' },
+  { value: 'lace project', labelKey: 'laceProject' },
+  { value: 'other', labelKey: 'other' },
 ];
 
 function renderToolSection(craft) {
@@ -76,10 +424,10 @@ function renderToolSection(craft) {
     ).join('');
     section.innerHTML = `
       <div class="form-group">
-        <label for="toolSize">Crochet Hook Size</label>
+        <label for="toolSize" data-i18n="hookSizeLabel">${t('hookSizeLabel')}</label>
         <select id="toolSize" required>
           ${hookOptions}
-          <option value="not sure - please recommend">Not sure \u2014 recommend one!</option>
+          <option value="not sure - please recommend" data-i18n="notSureRecommend">${t('notSureRecommend')}</option>
         </select>
       </div>
     `;
@@ -87,20 +435,20 @@ function renderToolSection(craft) {
     const sizeOptions = KNITTING_NEEDLE_SIZES.map(s =>
       `<option value="${s}"${s.includes('5.0mm') ? ' selected' : ''}>${s}</option>`
     ).join('');
-    const typeOptions = KNITTING_NEEDLE_TYPES.map(t =>
-      `<option value="${t}"${t.includes('Straight') ? ' selected' : ''}>${t}</option>`
+    const typeOptions = KNITTING_NEEDLE_TYPES_KEYS.map(k =>
+      `<option value="${KNITTING_NEEDLE_TYPES_VALUES[k]}" data-i18n="${k}"${k === 'straightNeedles' ? ' selected' : ''}>${t(k)}</option>`
     ).join('');
     section.innerHTML = `
       <div class="form-row">
         <div class="form-group">
-          <label for="toolSize">Needle Size</label>
+          <label for="toolSize" data-i18n="needleSizeLabel">${t('needleSizeLabel')}</label>
           <select id="toolSize" required>
             ${sizeOptions}
-            <option value="not sure - please recommend">Not sure \u2014 recommend one!</option>
+            <option value="not sure - please recommend" data-i18n="notSureRecommend">${t('notSureRecommend')}</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="needleType">Needle Type</label>
+          <label for="needleType" data-i18n="needleTypeLabel">${t('needleTypeLabel')}</label>
           <select id="needleType" required>
             ${typeOptions}
           </select>
@@ -113,7 +461,7 @@ function renderToolSection(craft) {
 function renderProjectTypes(craft) {
   const select = document.getElementById('projectType');
   const types = craft === 'crochet' ? CROCHET_PROJECT_TYPES : KNITTING_PROJECT_TYPES;
-  select.innerHTML = types.map(t => `<option value="${t.value}">${t.label}</option>`).join('');
+  select.innerHTML = types.map(pt => `<option value="${pt.value}" data-i18n="${pt.labelKey}">${t(pt.labelKey)}</option>`).join('');
 }
 
 function switchCraft(craft) {
@@ -134,25 +482,29 @@ function switchCraft(craft) {
   // Update placeholder text
   const desc = document.getElementById('projectDescription');
   if (craft === 'crochet') {
-    desc.placeholder = 'e.g., A cozy baby blanket with a star pattern, a cute amigurumi fox, a lacy summer top...';
+    desc.placeholder = t('descriptionPlaceholderCrochet');
   } else {
-    desc.placeholder = 'e.g., A chunky cable-knit scarf, a Fair Isle sweater, cozy ribbed socks...';
+    desc.placeholder = t('descriptionPlaceholderKnitting');
   }
 }
 
 // ---- Yarn entry template ----
 let yarnCounter = 0;
 
-const YARN_WEIGHTS = [
-  'Lace (0)',
-  'Super Fine / Fingering (1)',
-  'Fine / Sport (2)',
-  'Light / DK (3)',
-  'Medium / Worsted (4)',
-  'Bulky (5)',
-  'Super Bulky (6)',
-  'Jumbo (7)'
+const YARN_WEIGHT_KEYS = [
+  'lace', 'superFine', 'fine', 'light', 'medium', 'bulky', 'superBulky', 'jumbo'
 ];
+
+const YARN_WEIGHT_VALUES = {
+  lace: 'Lace (0)',
+  superFine: 'Super Fine / Fingering (1)',
+  fine: 'Fine / Sport (2)',
+  light: 'Light / DK (3)',
+  medium: 'Medium / Worsted (4)',
+  bulky: 'Bulky (5)',
+  superBulky: 'Super Bulky (6)',
+  jumbo: 'Jumbo (7)',
+};
 
 const COMMON_COLORS = [
   'White', 'Cream', 'Ivory', 'Black', 'Gray', 'Charcoal',
@@ -171,29 +523,34 @@ function createYarnEntry() {
   div.className = 'yarn-entry';
   div.dataset.yarnId = yarnCounter;
 
-  const colorOptions = COMMON_COLORS.map(c => `<option value="${c}">${c}</option>`).join('');
-  const weightOptions = YARN_WEIGHTS.map(w => `<option value="${w}"${w.includes('Worsted') ? ' selected' : ''}>${w}</option>`).join('');
+  const colorOptions = COMMON_COLORS.map(c => {
+    const label = currentLang === 'fr' ? (TRANSLATIONS.fr[c] || c) : c;
+    return `<option value="${c}">${label}</option>`;
+  }).join('');
+  const weightOptions = YARN_WEIGHT_KEYS.map(k =>
+    `<option value="${YARN_WEIGHT_VALUES[k]}" data-i18n="${k}"${k === 'medium' ? ' selected' : ''}>${t(k)}</option>`
+  ).join('');
 
   div.innerHTML = `
     <div class="yarn-entry-header">
-      <span class="yarn-entry-label">🧶 Yarn #${yarnCounter}</span>
-      <button type="button" class="btn-remove-yarn" title="Remove this yarn" onclick="removeYarn(this)">✕</button>
+      <span class="yarn-entry-label">🧶 ${t('yarnLabel')} #${yarnCounter}</span>
+      <button type="button" class="btn-remove-yarn" title="${t('removeYarnTitle')}" onclick="removeYarn(this)">✕</button>
     </div>
     <div class="yarn-fields">
       <div>
         <select class="yarn-color" required>
-          <option value="">Color...</option>
+          <option value="">${t('colorPlaceholder')}</option>
           ${colorOptions}
-          <option value="custom">Other (type below)</option>
+          <option value="custom">${t('colorOther')}</option>
         </select>
       </div>
-      <input type="text" class="yarn-color-custom" placeholder="Custom color" style="display:none;">
-      <input type="text" class="yarn-brand" placeholder="Brand (optional)">
+      <input type="text" class="yarn-color-custom" placeholder="${t('customColorPlaceholder')}" style="display:none;">
+      <input type="text" class="yarn-brand" placeholder="${t('brandPlaceholder')}">
       <select class="yarn-weight" required>
         ${weightOptions}
       </select>
-      <input type="number" class="yarn-quantity" placeholder="# of skeins" min="1" value="1" required>
-      <input type="number" class="yarn-yardage" placeholder="Yards per skein (optional)" min="1">
+      <input type="number" class="yarn-quantity" placeholder="${t('skeinsPlaceholder')}" min="1" value="1" required>
+      <input type="number" class="yarn-yardage" placeholder="${t('yardagePlaceholder')}" min="1">
     </div>
   `;
 
@@ -340,12 +697,13 @@ async function handleSubmit(e) {
     desiredWidth: document.getElementById('desiredWidth').value.trim(),
     desiredHeight: document.getElementById('desiredHeight').value.trim(),
     dimensionUnit: document.getElementById('dimensionUnit').value,
-    specialRequests: document.getElementById('specialRequests').value.trim()
+    specialRequests: document.getElementById('specialRequests').value.trim(),
+    language: currentLang
   };
 
   // Validate at least one yarn has a color
   if (!formData.yarns.length || !formData.yarns[0].color) {
-    showError('Please add at least one yarn with a color!');
+    showError(t('noYarnError'));
     return;
   }
 
@@ -399,7 +757,7 @@ async function handleSubmit(e) {
     .catch(err => {
       if (patternProgress) patternProgress.complete();
       document.getElementById('patternLoading').style.display = 'none';
-      showError('Failed to generate pattern: ' + err.message);
+      showError(t('failPattern') + err.message);
     })
     .finally(() => {
       btn.disabled = false;
@@ -493,12 +851,12 @@ function applyTheme(themeId) {
 
 function renderThemePopup() {
   const popup = document.getElementById('themePopup');
-  popup.innerHTML = THEMES.map(t => `
-    <button class="theme-option${t.id === (localStorage.getItem('craft-studio-theme') || 'lavender') ? ' active' : ''}" data-theme="${t.id}">
+  popup.innerHTML = THEMES.map(th => `
+    <button class="theme-option${th.id === (localStorage.getItem('craft-studio-theme') || 'lavender') ? ' active' : ''}" data-theme="${th.id}">
       <div class="theme-swatch">
-        ${t.colors.map(c => `<span style="background:${c}"></span>`).join('')}
+        ${th.colors.map(c => `<span style="background:${c}"></span>`).join('')}
       </div>
-      ${t.label}
+      ${th.label}
     </button>
   `).join('');
 
@@ -529,7 +887,7 @@ function updateLibraryCount() {
 
 async function saveToLibrary() {
   if (!window._lastPatternText) {
-    showError('No pattern to save yet!');
+    showError(t('noPatternError'));
     return;
   }
 
@@ -558,11 +916,11 @@ async function saveToLibrary() {
       updateLibraryCount();
       const btn = document.getElementById('saveBtn');
       const orig = btn.textContent;
-      btn.textContent = '✅ Saved!';
-      setTimeout(() => btn.textContent = orig, 2500);
+      btn.textContent = t('savedBtn');
+      setTimeout(() => btn.textContent = t('saveBtn'), 2500);
     }
   } catch (err) {
-    showError('Failed to save: ' + err.message);
+    showError(t('failSave') + err.message);
   }
 }
 
@@ -596,10 +954,10 @@ function renderLibraryList() {
 
   listEl.innerHTML = sorted.map(entry => {
     const craftIcon = entry.craftType === 'knitting' ? '🧶' : '🧶';
-    const craftLabel = entry.craftType === 'knitting' ? 'Knitting' : 'Crochet';
+    const craftLabel = entry.craftType === 'knitting' ? t('knittingLabel') : t('crochetLabel');
     const date = new Date(entry.createdAt).toLocaleDateString();
     const modified = entry.modifiedAt && entry.modifiedAt !== entry.createdAt
-      ? ` · Edited ${new Date(entry.modifiedAt).toLocaleDateString()}` : '';
+      ? ` · ${currentLang === 'fr' ? 'Modifié' : 'Edited'} ${new Date(entry.modifiedAt).toLocaleDateString()}` : '';
     const stars = [1,2,3,4,5].map(s =>
       `<span class="library-star${s <= entry.rating ? ' filled' : ''}" data-id="${entry.id}" data-star="${s}">★</span>`
     ).join('');
@@ -619,10 +977,10 @@ function renderLibraryList() {
           </div>
           <div class="library-stars">${stars}</div>
           <div class="library-entry-actions">
-            <button class="lib-action-btn lib-view-btn" data-id="${entry.id}" title="View pattern">📖 View</button>
-            <button class="lib-action-btn lib-edit-btn" data-id="${entry.id}" title="Edit pattern">✏️ Edit</button>
-            <button class="lib-action-btn lib-print-btn" data-id="${entry.id}" title="Print pattern">🖨️ Print</button>
-            <button class="lib-action-btn lib-delete-btn" data-id="${entry.id}" title="Delete">🗑️</button>
+            <button class="lib-action-btn lib-view-btn" data-id="${entry.id}" title="${t('viewBtn')}">${t('viewBtn')}</button>
+            <button class="lib-action-btn lib-edit-btn" data-id="${entry.id}" title="${t('editBtn')}">${t('editBtn')}</button>
+            <button class="lib-action-btn lib-print-btn" data-id="${entry.id}" title="${t('printLibBtn')}">${t('printLibBtn')}</button>
+            <button class="lib-action-btn lib-delete-btn" data-id="${entry.id}" title="${t('deleteBtn')}">${t('deleteBtn')}</button>
           </div>
         </div>
       </div>
@@ -650,7 +1008,7 @@ function renderLibraryList() {
     el.addEventListener('click', () => {
       const id = el.dataset.id;
       const entry = libraryEntries.find(e => e.id === id);
-      const newName = prompt('Rename pattern:', entry.name);
+      const newName = prompt(t('renamePrompt'), entry.name);
       if (newName && newName.trim()) {
         fetch(`/api/library/${id}`, {
           method: 'PATCH',
@@ -691,7 +1049,7 @@ function renderLibraryList() {
 
   listEl.querySelectorAll('.lib-delete-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
-      if (!confirm('Delete this pattern?')) return;
+      if (!confirm(t('confirmDelete'))) return;
       const id = btn.dataset.id;
       await fetch(`/api/library/${id}`, { method: 'DELETE' });
       libraryEntries = libraryEntries.filter(e => e.id !== id);
@@ -728,8 +1086,8 @@ function showLibraryPattern(entry, editable) {
     content.innerHTML = `
       <textarea id="patternEditor" class="pattern-editor">${entry.pattern}</textarea>
       <div class="editor-actions">
-        <button class="btn-action btn-save" id="saveEditBtn">💾 Save Changes</button>
-        <button class="btn-action" id="cancelEditBtn">✗ Cancel</button>
+        <button class="btn-action btn-save" id="saveEditBtn">${t('saveChanges')}</button>
+        <button class="btn-action" id="cancelEditBtn">${t('cancelEdit')}</button>
       </div>
     `;
     document.getElementById('saveEditBtn').addEventListener('click', async () => {
@@ -758,9 +1116,9 @@ function showLibraryPattern(entry, editable) {
 
   // Temporarily swap "New Pattern" to "Back to Library"
   const newBtn = document.getElementById('newPatternBtn');
-  newBtn.textContent = '📚 Back to Library';
+  newBtn.textContent = t('backToLibrary');
   newBtn.onclick = () => {
-    newBtn.textContent = '🧶 New Pattern';
+    newBtn.textContent = t('newPatternBtn');
     newBtn.onclick = handleNewPattern;
     showLibrary();
   };
@@ -775,9 +1133,8 @@ function handleCopy() {
   if (window._lastPatternText) {
     navigator.clipboard.writeText(window._lastPatternText).then(() => {
       const btn = document.getElementById('copyBtn');
-      const orig = btn.textContent;
-      btn.textContent = '✅ Copied!';
-      setTimeout(() => btn.textContent = orig, 2000);
+      btn.textContent = t('copiedBtn');
+      setTimeout(() => btn.textContent = t('copyBtn'), 2000);
     });
   }
 }
@@ -788,6 +1145,9 @@ function handleNewPattern() {
 
   // Reset form fields
   document.getElementById('patternForm').reset();
+
+  // Restore language toggle state (form reset may clear it)
+  document.getElementById('langToggle').checked = currentLang === 'fr';
 
   // Reset craft type to crochet
   switchCraft('crochet');
@@ -801,8 +1161,129 @@ function handleNewPattern() {
   document.getElementById('formSection').scrollIntoView({ behavior: 'smooth' });
 }
 
+// ---- Language switching ----
+function updateLangLabels() {
+  const enLabel = document.querySelector('.lang-en');
+  const frLabel = document.querySelector('.lang-fr');
+  if (enLabel) enLabel.classList.toggle('active', currentLang === 'en');
+  if (frLabel) frLabel.classList.toggle('active', currentLang === 'fr');
+}
+
+function applyLanguage() {
+  updateLangLabels();
+
+  // Update page title
+  document.title = t('siteTitle');
+
+  // Update all elements with data-i18n attribute (textContent)
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (key && el.tagName === 'OPTION') {
+      el.textContent = t(key);
+    } else if (key) {
+      el.textContent = t(key);
+    }
+  });
+
+  // Update all elements with data-i18n-placeholder (placeholder attribute)
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (key) el.placeholder = t(key);
+  });
+
+  // Update all elements with data-i18n-title (title attribute)
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    const key = el.getAttribute('data-i18n-title');
+    if (key) el.title = t(key);
+  });
+
+  // Re-render dynamic sections
+  renderToolSection(currentCraft);
+  renderProjectTypes(currentCraft);
+
+  // Update description placeholder based on current craft
+  const desc = document.getElementById('projectDescription');
+  desc.placeholder = currentCraft === 'crochet'
+    ? t('descriptionPlaceholderCrochet')
+    : t('descriptionPlaceholderKnitting');
+
+  // Re-render yarn entries (preserve values)
+  rerenderYarnEntries();
+}
+
+function rerenderYarnEntries() {
+  const yarnList = document.getElementById('yarnList');
+  const entries = yarnList.querySelectorAll('.yarn-entry');
+
+  entries.forEach((entry, idx) => {
+    // Update label
+    const label = entry.querySelector('.yarn-entry-label');
+    if (label) label.textContent = `🧶 ${t('yarnLabel')} #${idx + 1}`;
+
+    // Update remove button title
+    const removeBtn = entry.querySelector('.btn-remove-yarn');
+    if (removeBtn) removeBtn.title = t('removeYarnTitle');
+
+    // Update color select options (preserve selected value)
+    const colorSelect = entry.querySelector('.yarn-color');
+    if (colorSelect) {
+      const selectedVal = colorSelect.value;
+      // Update placeholder option
+      const firstOpt = colorSelect.querySelector('option[value=""]');
+      if (firstOpt) firstOpt.textContent = t('colorPlaceholder');
+      // Update color options
+      COMMON_COLORS.forEach(c => {
+        const opt = colorSelect.querySelector(`option[value="${c}"]`);
+        if (opt) opt.textContent = currentLang === 'fr' ? (TRANSLATIONS.fr[c] || c) : c;
+      });
+      // Update "Other" option
+      const customOpt = colorSelect.querySelector('option[value="custom"]');
+      if (customOpt) customOpt.textContent = t('colorOther');
+      colorSelect.value = selectedVal;
+    }
+
+    // Update custom color placeholder
+    const customInput = entry.querySelector('.yarn-color-custom');
+    if (customInput) customInput.placeholder = t('customColorPlaceholder');
+
+    // Update brand placeholder
+    const brandInput = entry.querySelector('.yarn-brand');
+    if (brandInput) brandInput.placeholder = t('brandPlaceholder');
+
+    // Update weight select options (preserve selected value)
+    const weightSelect = entry.querySelector('.yarn-weight');
+    if (weightSelect) {
+      const selectedVal = weightSelect.value;
+      weightSelect.querySelectorAll('option[data-i18n]').forEach(opt => {
+        const key = opt.getAttribute('data-i18n');
+        if (key) opt.textContent = t(key);
+      });
+      weightSelect.value = selectedVal;
+    }
+
+    // Update quantity placeholder
+    const qtyInput = entry.querySelector('.yarn-quantity');
+    if (qtyInput) qtyInput.placeholder = t('skeinsPlaceholder');
+
+    // Update yardage placeholder
+    const yardInput = entry.querySelector('.yarn-yardage');
+    if (yardInput) yardInput.placeholder = t('yardagePlaceholder');
+  });
+}
+
 // ---- Initialize ----
 document.addEventListener('DOMContentLoaded', () => {
+  // Initialize language
+  const langToggle = document.getElementById('langToggle');
+  langToggle.checked = currentLang === 'fr';
+  updateLangLabels();
+
+  langToggle.addEventListener('change', () => {
+    currentLang = langToggle.checked ? 'fr' : 'en';
+    localStorage.setItem('craft-studio-lang', currentLang);
+    applyLanguage();
+  });
+
   // Initialize craft type (default crochet)
   renderToolSection('crochet');
   renderProjectTypes('crochet');
@@ -854,4 +1335,9 @@ document.addEventListener('DOMContentLoaded', () => {
       popup.style.display = 'none';
     }
   });
+
+  // Apply saved language on load
+  if (currentLang === 'fr') {
+    applyLanguage();
+  }
 });
