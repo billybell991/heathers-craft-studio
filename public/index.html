@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heather's Craft Studio</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Decorative yarn balls -->
+  <div class="yarn-deco yarn-deco-1">🧶</div>
+  <div class="yarn-deco yarn-deco-2">🧶</div>
+  <div class="yarn-deco yarn-deco-3">🪡</div>
+
+  <header>
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">🧶</span>
+        <div>
+          <h1>Heather's Craft Studio</h1>
+          <p class="tagline">AI-Powered Pattern Magic</p>
+        </div>
+      </div>
+      <button class="header-library-btn" id="showLibraryBtn" title="My Pattern Library">
+        📚 <span class="library-count" id="libraryCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- =================== INPUT FORM =================== -->
+    <section class="card form-card" id="formSection">
+      <h2><span class="section-icon">✨</span> Describe Your Dream Project</h2>
+
+      <form id="patternForm">
+
+        <!-- Craft Type -->
+        <div class="form-group">
+          <label for="craftType">What are we making today?</label>
+          <div class="craft-toggle">
+            <button type="button" class="craft-btn active" data-craft="crochet">
+              <span class="craft-btn-icon">🧶</span> Crochet
+            </button>
+            <button type="button" class="craft-btn" data-craft="knitting">
+              <span class="craft-btn-icon">🧶</span> Knitting
+            </button>
+          </div>
+          <input type="hidden" id="craftType" value="crochet">
+        </div>
+
+        <!-- Project Description -->
+        <div class="form-group">
+          <label for="projectDescription">What would you like to make?</label>
+          <textarea id="projectDescription" rows="3" placeholder="e.g., A cozy baby blanket with a star pattern, a cute amigurumi fox, a lacy summer top..." required></textarea>
+        </div>
+
+        <!-- Project Type + Skill Level row -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="projectType">Project Type</label>
+            <select id="projectType" required>
+              <option value="">Choose one...</option>
+              <option value="blanket">Blanket / Afghan</option>
+              <option value="scarf">Scarf / Cowl</option>
+              <option value="hat">Hat / Beanie</option>
+              <option value="sweater">Sweater / Cardigan</option>
+              <option value="shawl">Shawl / Wrap</option>
+              <option value="amigurumi">Amigurumi (Stuffed Toy)</option>
+              <option value="bag">Bag / Tote</option>
+              <option value="socks">Socks / Slippers</option>
+              <option value="mittens">Mittens / Gloves</option>
+              <option value="top">Top / Shirt</option>
+              <option value="dress">Dress / Skirt</option>
+              <option value="home decor">Home Decor (Pillow, Coaster, etc.)</option>
+              <option value="baby item">Baby Item (Booties, Bib, etc.)</option>
+              <option value="granny square">Granny Square Project</option>
+              <option value="doily">Doily / Table Runner</option>
+              <option value="accessory">Accessory (Headband, Earrings, etc.)</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="skillLevel">Skill Level</label>
+            <select id="skillLevel" required>
+              <option value="beginner">Beginner 🌱</option>
+              <option value="intermediate" selected>Intermediate 🌿</option>
+              <option value="advanced">Advanced 🌳</option>
+              <option value="expert">Expert 🏆</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Tool Section (dynamic: crochet hook or knitting needles) -->
+        <div id="toolSection">
+          <!-- Populated dynamically by JS -->
+        </div>
+
+        <!-- Yarn Inventory -->
+        <div class="form-group yarn-section">
+          <label>
+            <span class="section-icon">🧶</span> Your Yarn Stash
+          </label>
+          <div id="yarnList">
+            <!-- Yarn entries will be added here -->
+          </div>
+          <button type="button" class="btn-add-yarn" id="addYarnBtn" title="Add another yarn">+ Add Yarn</button>
+        </div>
+
+        <!-- Dimensions (optional) -->
+        <div class="form-group">
+          <label>Desired Finished Size <span class="optional">(optional)</span></label>
+          <div class="dimensions-row">
+            <input type="text" id="desiredWidth" placeholder="Width" class="dim-input">
+            <span class="dim-x">×</span>
+            <input type="text" id="desiredHeight" placeholder="Height" class="dim-input">
+            <select id="dimensionUnit" class="dim-unit">
+              <option value="inches">inches</option>
+              <option value="cm">cm</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Special Requests -->
+        <div class="form-group">
+          <label for="specialRequests">Special Requests <span class="optional">(optional)</span></label>
+          <textarea id="specialRequests" rows="2" placeholder="e.g., I'd love a scalloped edge, make it machine-washable, use a shell stitch..."></textarea>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn-generate" id="generateBtn">
+          <span class="btn-text">🪄 Generate My Pattern!</span>
+          <span class="btn-loading" style="display:none;">
+            <span class="spinner"></span> Creating your pattern...
+          </span>
+        </button>
+      </form>
+    </section>
+
+    <!-- =================== RESULTS =================== -->
+    <section class="card results-card" id="resultsSection" style="display:none;">
+      <h2><span class="section-icon">🎉</span> Your Custom Pattern</h2>
+
+      <!-- Preview Image -->
+      <div class="preview-container" id="previewContainer">
+        <div class="preview-loading" id="previewLoading">
+          <div class="progress-tracker" id="imageProgressTracker">
+            <div class="progress-step active" data-step="0">
+              <span class="step-icon">🎨</span>
+              <span class="step-text">Picking your colors and imagining the design...</span>
+            </div>
+            <div class="progress-step" data-step="1">
+              <span class="step-icon">🖌️</span>
+              <span class="step-text">Painting the yarn textures and stitches...</span>
+            </div>
+            <div class="progress-step" data-step="2">
+              <span class="step-icon">📸</span>
+              <span class="step-text">Styling the photo — almost done!</span>
+            </div>
+          </div>
+        </div>
+        <div class="preview-image-wrap" id="previewImageWrap" style="display:none;">
+          <img id="previewImage" alt="Preview of your finished crochet project">
+          <p class="preview-caption">✨ AI-generated preview of your finished project</p>
+        </div>
+      </div>
+
+      <!-- Pattern Text -->
+      <div class="pattern-container" id="patternContainer">
+        <div class="pattern-loading" id="patternLoading">
+          <div class="progress-tracker" id="patternProgressTracker">
+            <div class="progress-step active" data-step="0">
+              <span class="step-icon">🧶</span>
+              <span class="step-text">Reading your yarn stash and project details...</span>
+            </div>
+            <div class="progress-step" data-step="1">
+              <span class="step-icon">🪝</span>
+              <span class="step-text">Choosing the best stitches for your project...</span>
+            </div>
+            <div class="progress-step" data-step="2">
+              <span class="step-icon">🔢</span>
+              <span class="step-text">Calculating stitch counts and measurements...</span>
+            </div>
+            <div class="progress-step" data-step="3">
+              <span class="step-icon">📝</span>
+              <span class="step-text">Writing row-by-row instructions...</span>
+            </div>
+            <div class="progress-step" data-step="4">
+              <span class="step-icon">🎀</span>
+              <span class="step-text">Adding finishing touches and helpful tips...</span>
+            </div>
+          </div>
+        </div>
+        <div class="pattern-content" id="patternContent" style="display:none;">
+          <!-- Pattern will be rendered here -->
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="result-actions" id="resultActions" style="display:none;">
+        <button class="btn-action" id="printBtn" title="Print pattern">🖨️ Print Pattern</button>
+        <button class="btn-action" id="copyBtn" title="Copy pattern text">📋 Copy to Clipboard</button>
+        <button class="btn-action btn-save" id="saveBtn" title="Save to library">💾 Save to Library</button>
+        <button class="btn-action btn-new" id="newPatternBtn">🧶 New Pattern</button>
+      </div>
+    </section>
+
+    <!-- =================== LIBRARY =================== -->
+    <section class="card library-card" id="librarySection" style="display:none;">
+      <div class="library-header">
+        <h2><span class="section-icon">📚</span> My Pattern Library</h2>
+        <button class="btn-action" id="backFromLibraryBtn">← Back</button>
+      </div>
+      <div id="libraryList" class="library-list">
+        <!-- Library entries rendered here -->
+      </div>
+      <div class="library-empty" id="libraryEmpty" style="display:none;">
+        <span class="library-empty-icon">🗃️</span>
+        <p>No patterns saved yet!</p>
+        <p class="library-empty-sub">Generate a pattern and click "💾 Save to Library" to start building your collection.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Theme Selector (bottom-left) -->
+  <button class="theme-btn" id="themeBtn" title="Change theme">🎨</button>
+  <div class="theme-popup" id="themePopup" style="display:none;">
+    <!-- Populated by JS -->
+  </div>
+
+  <footer>
+    <p>Made with 💕 and yarn — Heather's Craft Studio</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
